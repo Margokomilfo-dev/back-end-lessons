@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import {addressesRouter} from "./routes/addresses-router";
 import {productsRouter} from "./routes/products-router";
 
-const app = express()
+export const app = express()
 const port = 3001
 
 app.use(bodyParser({}))

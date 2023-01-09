@@ -1,7 +1,7 @@
 import {Request, Response, Router} from "express";
 
 export const productsRouter = Router({})
-const products = [{id: 1,title: 'tomato'}, {id: 2,title: 'carrot'}]
+export let products = [{id: 1,title: 'tomato'}, {id: 2,title: 'carrot'}]
 
 productsRouter.get('/', (req: Request, res: Response) => {
     if(req.query.title){
@@ -29,6 +29,7 @@ productsRouter.get('/:title', (req: Request, res: Response) => {
 })
 productsRouter.post('', (req: Request, res: Response) => {
     const title = req.body.title
+
     if(!title){
         res.sendStatus(400)
         return
@@ -40,6 +41,7 @@ productsRouter.post('', (req: Request, res: Response) => {
 productsRouter.put('/:id', (req: Request, res: Response) => {
     const id = +req.params.id
     const title = req.body.title
+
     if(!id || !title){
         res.sendStatus(400)
         return
@@ -62,4 +64,8 @@ productsRouter.delete('/:id', (req: Request, res: Response) => {
         }
     }
     res.sendStatus(404)
+})
+productsRouter.delete('/__tests__/data', (req: Request, res: Response) => {
+    products = []
+    res.sendStatus(201).send(products)
 })
