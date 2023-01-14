@@ -36,14 +36,17 @@ productsRouter.post('', (req: Request, res: Response, next: NextFunction)=> {
     res.status(201).send(product)
 })
 
-productsRouter.put('/:id', (req: Request, res: Response) => {
+productsRouter.put('/:id', (req: Request, res: Response, next: NextFunction)=> {
     const id = +req.params.id
     const title = req.body.title
-
     if (!id || !title) {
         res.sendStatus(400)
-        return
+    }else {
+        next()
     }
+},(req: Request, res: Response) => {
+    const id = +req.params.id
+    const title = req.body.title
     const product = productsRepository.updateProduct(id, title)
     if (!product) {
         res.sendStatus(404)
