@@ -14,6 +14,10 @@ app.get('/', (req: Request, res: Response)=> {
     res.send('Hello back-end lessons in it-incubator!!!')
 })
 
+app.get('/__tests__/delete-all', (req: Request, res: Response)=> {
+    res.send('Hello back-end lessons in it-incubator!!!')
+})
+
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
