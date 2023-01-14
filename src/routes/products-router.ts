@@ -1,6 +1,7 @@
-import {NextFunction, Request, Response, Router} from "express";
+import {Request, Response, Router} from "express";
 import {productsRepository} from "../repositories/products-repository";
-import {body, validationResult} from "express-validator";
+import {idValidator, titleValidator} from "../validation/request-validators";
+import {errorsValidatorCreator} from "../validation/errors-validator-creator";
 
 export const productsRouter = Router({})
 
@@ -21,15 +22,9 @@ productsRouter.get('/:title', (req: Request, res: Response) => {
 })
 
 productsRouter.post('',
-    body('title').trim().isLength({ min: 3, max: 10}),
+    titleValidator,
+    errorsValidatorCreator,
     (req: Request, res: Response) => {
-
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        res.status(400).send({ title: 'not valid' });
-        return
-    }
-
     const product = productsRepository.createProduct(req.body.title)
 
     if(!product){
@@ -39,15 +34,11 @@ productsRouter.post('',
     res.status(201).send(product)
 })
 
-productsRouter.put('/:id', (req: Request, res: Response, next: NextFunction)=> {
-    const id = +req.params.id
-    const title = req.body.title
-    if (!id || !title) {
-        res.sendStatus(400)
-    }else {
-        next()
-    }
-},(req: Request, res: Response) => {
+productsRouter.put('/:id',
+    idValidator,
+    titleValidator,
+    errorsValidatorCreator
+,(req: Request, res: Response) => {
     const id = +req.params.id
     const title = req.body.title
     const product = productsRepository.updateProduct(id, title)
@@ -58,7 +49,7 @@ productsRouter.put('/:id', (req: Request, res: Response, next: NextFunction)=> {
     }
 })
 
-productsRouter.delete('/:id', (req: Request, res: Response) => {
+productsRouter.delete('/:id', idValidator,(req: Request, res: Response) => {
     const uriParam = +req.params.id
     const isDeleted = productsRepository.deleteProduct(uriParam)
    if(isDeleted){
