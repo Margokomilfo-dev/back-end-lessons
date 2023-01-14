@@ -35,7 +35,7 @@ describe('/products', function () {
     it('-POST should not create new product with incorrect data', async function () {
         await request(app)
             .post('/products').send({'title': ''}).
-            expect(400)
+            expect(400,{ title: 'not valid' })
         await request(app)
             .get('/products').
             expect(200, [])
