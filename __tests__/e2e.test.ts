@@ -24,7 +24,17 @@ describe('/products', function () {
 
     it('-POST should not create new product with incorrect data', async function () {
         await request(app)
-            .post('/products').send({'tit': 'cucumber'})
+            .post('/products').send({'tit': 'cucumber'}).
+            expect(400)
+        await request(app)
+            .get('/products').
+            expect(200, [])
+
+    });
+
+    it('-POST should not create new product with incorrect data', async function () {
+        await request(app)
+            .post('/products').send({'title': ''}).
             expect(400)
         await request(app)
             .get('/products').
@@ -35,9 +45,11 @@ describe('/products', function () {
     let createdProduct: any = null
     it('+POST should create new product with correct data', async function () {
         const createdResponse = await request(app)
-            .post('/products').send({'title': 'cucumber'})
+            .post('/products').send({'title': 'cucumber'}).
             expect(201)
         createdProduct = createdResponse.body
+
+
         expect(createdProduct).toEqual({
             id: expect.any(Number),
             title: 'cucumber'

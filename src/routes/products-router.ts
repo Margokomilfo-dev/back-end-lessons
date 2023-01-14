@@ -1,4 +1,4 @@
-import {Request, Response, Router} from "express";
+import {NextFunction, Request, Response, Router} from "express";
 import {productsRepository} from "../repositories/products-repository";
 
 export const productsRouter = Router({})
@@ -19,7 +19,14 @@ productsRouter.get('/:title', (req: Request, res: Response) => {
 
 })
 
-productsRouter.post('', (req: Request, res: Response) => {
+productsRouter.post('', (req: Request, res: Response, next: NextFunction)=> {
+    const title = req.body.title
+    if(title && title.trim()){
+        next()
+    }else {
+        res.sendStatus(400)
+    }
+}, (req: Request, res: Response) => {
     const product = productsRepository.createProduct(req.body.title)
 
     if(!product){
