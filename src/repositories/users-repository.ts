@@ -17,7 +17,7 @@ export const usersRepository = {
 export type UserDBType = {
     _id: ObjectId,
     userName: string,
-    salt:string,
+    // salt:string,
     passwordHash:string,
     createdAt: Date
 }
