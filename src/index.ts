@@ -2,6 +2,7 @@ import express, {Request, Response} from 'express'
 import {addressesRouter} from "./routes/addresses-router";
 import {productsRouter} from "./routes/products-router";
 import {usersRouter} from "./routes/users-router";
+import {runDb} from "./mongo/db";
 
 export const app = express()
 const port = 3001
@@ -19,6 +20,12 @@ app.get('/__tests__/delete-all', (req: Request, res: Response)=> {
     res.send('Hello back-end lessons in it-incubator!!!')
 })
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+
+const startApp = async () => {
+    await runDb()
+    app.listen(port, () => {
+        console.log(`Example app listening on port ${port}`)
+    })
+}
+
+startApp()
